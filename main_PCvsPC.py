@@ -14,16 +14,16 @@ for i in range(5000):
     print()
     piskvorky.__init__()
 
-    piskvorky.area[0] = 'OOOOXOOOOX'
-    piskvorky.area[1] = 'XXXXOXXXXO'
-    piskvorky.area[2] = 'OOOOXOOOOX'
-    piskvorky.area[3] = 'XXXXOXXXXO'
-    piskvorky.area[4] = 'OOOOXOOXOX'
-    piskvorky.area[5] = 'XXXX X    '
-    piskvorky.area[6] = 'OOOO OOOOX'
-    piskvorky.area[7] = 'XXXXOXXXXO'
-    piskvorky.area[8] = 'OOOO OOOOX'
-    piskvorky.area[9] = 'XXXXOXXXXO'
+    piskvorky.pole[0] = 'OOOOXOOOOX'
+    piskvorky.pole[1] = 'XXXXOXXXXO'
+    piskvorky.pole[2] = 'OOOOXOOOOX'
+    piskvorky.pole[3] = 'XXXXOXXXXO'
+    piskvorky.pole[4] = 'OOOOXOOXOX'
+    piskvorky.pole[5] = 'XXXX X    '
+    piskvorky.pole[6] = 'OOOO OOOOX'
+    piskvorky.pole[7] = 'XXXXOXXXXO'
+    piskvorky.pole[8] = 'OOOO OOOOX'
+    piskvorky.pole[9] = 'XXXXOXXXXO'
 
     pocet_kol = 0
     while not piskvorky.vyhodnot('O'):  # while p.vyhodnot('X') != 'X' or p.vyhodnot('O') != 'O' or p.vyhodnot('-') != '-':
@@ -59,9 +59,9 @@ for i in range(5000):
     print('vyhrál O:', vyher_o)
     
 print('  time_while ')
-for time in piskvorky.time_while_all:
-    if time > 0:
-        print(time)
+for cas in piskvorky.cas_while_vse:
+    if cas > 0:
+        print(cas)
 
 print('\nCelkem:')
 print('počet kol celkem:', pocet_kol_celkem)

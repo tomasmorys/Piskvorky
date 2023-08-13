@@ -4,41 +4,41 @@ from random import randint, randrange
 import time
 
 class Piskvorky:
-    #area =  []
+    pole =  []
     volno = False
     aktualni_tah_i = None
     aktualni_tah_j = None
-    time_while = None
-    time_while_all = []
+    cas_while = None
+    cas_while_vse = []
     souradnice_vyhry = []
+    znak_xo = ''
 
     def __init__(self) -> None:
-        self.area = []
+        self.pole = []
         a = ' ' * 10
-        for i in range(10): self.area.append(a)
+        for i in range(10): self.pole.append(a)
 
     def je_volno(self) -> bool:
         # kontrola volnéhe pole
         self.volno = False
         for i in range(10):
             for j in range(10):
-                if self.area[i][j] == ' ':
+                if self.pole[i][j] == ' ':
                     self.volno = True
         
     def je_volno_na_souradnicich(self, i, j) -> bool:
         # kontrola volnéhe pole
-        if self.area[i][j] == ' ':
+        if self.pole[i][j] == ' ':
             return True
         return False
         
     def vyhodnot(self, znak_xo):  # vrátí 'X' or 'O' or '-' za remízu  or None - to v případě chyby
-        self.znak = znak_xo
-        
+#       #self.znak = znak_xo        
         # vyhodnot řadky
         for i in range(10):
-            if znak_xo * 5 in self.area[i]:
+            if znak_xo * 5 in self.pole[i]:
                 print('výhra:', znak_xo,'řádek: ', i)
-                s_vyhry = self.area[i].find(znak_xo * 5)
+                s_vyhry = self.pole[i].find(znak_xo * 5)
                 for s in range(5):
                     self.souradnice_vyhry.append((i, s_vyhry + s))
                     self.aktualni_tah_i = None
@@ -50,7 +50,7 @@ class Piskvorky:
             z = False
             pocet_znaku = 0
             for i in range(10):
-                if znak_xo == self.area[i][j]:
+                if znak_xo == self.pole[i][j]:
                     pocet_znaku += 1
                     if pocet_znaku >= 5:
                         print('výhra: ', znak_xo ,'sloupec, souradnice:', i, j)
@@ -70,7 +70,7 @@ class Piskvorky:
                 i2 = i
                 j2 = j
                 while i2 <= 9 and j2 >= 0:
-                    if self.area[i2][j2] == znak_xo:
+                    if self.pole[i2][j2] == znak_xo:
                         pocet_znaku += 1
                         self.souradnice_vyhry.append((i2, j2))
                         if pocet_znaku >= 5:
@@ -91,7 +91,7 @@ class Piskvorky:
                 i2 = i
                 j2 = j
                 while i2 <= 9 and j2 <= 9:
-                    if self.area[i2][j2] == znak_xo:
+                    if self.pole[i2][j2] == znak_xo:
                         pocet_znaku += 1
                         self.souradnice_vyhry.append((i2, j2))
                         if pocet_znaku >= 5:
@@ -112,16 +112,16 @@ class Piskvorky:
     def zapis_znak(self, i, j, znak_xo) -> None:  # zapiš znak na souřadnice i, j
         self.i = i
         self.j = j
-        self.znak = znak_xo
+#        self.znak = znak_xo
         if self.je_volno_na_souradnicich(i, j):
-            self.area[i] = self.area[i][:j] + znak_xo + self.area[i][j + 1:]
+            self.pole[i] = self.pole[i][:j] + znak_xo + self.pole[i][j + 1:]
             self.aktualni_tah_i = i
             self.aktualni_tah_j = j
         else:
             print(f'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee   error na souřadnicích: {i} {j}')
         
     def tah_hrace(self, znak_xo) -> None:
-        self.znak_xo = znak_xo        
+#        self.znak_xo = znak_xo
         while True:
             i = input('zadej souřadnici   řádku: ')
             j = input('zadej souřadnici sloupce: ')
@@ -129,28 +129,28 @@ class Piskvorky:
                 i = int(i)
                 j = int(j)
             if  i in range(10) and j in range(10) and self.je_volno_na_souradnicich(i, j):
-                self.zapis_znak(i, j, self.znak_xo)
+                self.zapis_znak(i, j, znak_xo)
                 break
             print('Zadej souřadnice na volné pole 0 až 9 !')
 
     def tah_pc_nahodny(self, znak_xo) -> None:
         self.znak = znak_xo
-        today = None
+        nyni = None
         r1 = randrange(0, 10)
         r2 = randrange(0, 10)
 # dopsat kontrolu volného místa na hrací ploše
-        while self.area[r1][r2] != ' ':  # and self.je_volno_na_souradnicich(r1, r2):    and self.je_volno()
-            today = time.time()
+        while self.pole[r1][r2] != ' ':  # and self.je_volno_na_souradnicich(r1, r2):    and self.je_volno()
+            nyni = time.time()
             r1 = randrange(0, 10)
             r2 = randrange(0, 10)            
-        if today:            
-            self.time_while = time.time() - today
-            self.time_while_all.append(self.time_while)
-            print(f'čas vyhledání volného pole pro "def tah_pc_nahodny" {self.time_while} s')
+        if nyni:            
+            self.cas_while = time.time() - nyni
+            self.cas_while_vse.append(self.cas_while)
+            print(f'čas vyhledání volného pole pro "def tah_pc_nahodny" {self.cas_while} s')
         self.aktualni_tah_i = r1
         self.aktualni_tah_j = r2
         print(f'hráč: "{znak_xo}" náhodný tah: {self.aktualni_tah_i}, {self.aktualni_tah_j}')
-        self.area[r1] = self.area[r1][:r2] + znak_xo + self.area[r1][r2 + 1:]        
+        self.pole[r1] = self.pole[r1][:r2] + znak_xo + self.pole[r1][r2 + 1:]        
 
     def tah_pc_01(self, znak_xo) -> None:
         self.znak_xo = znak_xo
@@ -161,9 +161,9 @@ class Piskvorky:
             s = 'X'
         def tah_v_radku(search_string, index_posunuti, znak_xo) -> bool:
             for i in range(10):
-                if search_string in self.area[i]:
+                if search_string in self.pole[i]:
                     print(f'hráč: "{znak_xo}" nalezeno: "{search_string}" řádek: {i}')
-                    self.zapis_znak(i, self.area[i].index(search_string) + index_posunuti, self.znak_xo)
+                    self.zapis_znak(i, self.pole[i].index(search_string) + index_posunuti, self.znak_xo)
                     return True
             return None
         def tah_ve_sloupci(search_string, index_posunuti, znak_xo) -> bool:
@@ -171,7 +171,7 @@ class Piskvorky:
             for j in range(10):
                 prac_str = ''
                 for i in range(10):
-                    prac_str += self.area[i][j]
+                    prac_str += self.pole[i][j]
                     if search_string in prac_str:
                         print(f'hráč: "{znak_xo}" sloupec - nalezeno: "{search_string}" sloupec: {j} prac_str: "{prac_str}"')  #
                         self.zapis_znak(prac_str.index(search_string) + index_posunuti, j, self.znak_xo)
@@ -188,7 +188,7 @@ class Piskvorky:
                     i2 = i
                     j2 = j
                     while i2 <= 9 and j2 >= 0:
-                        prac_str += self.area[i2][j2]
+                        prac_str += self.pole[i2][j2]
                         i2 += 1
                         j2 -= 1
                     i2 -= 1
@@ -213,7 +213,7 @@ class Piskvorky:
                     i2 = i
                     j2 = j
                     while i2 <= 9 and j2 <= 9:
-                        prac_str += self.area[i2][j2]
+                        prac_str += self.pole[i2][j2]
                         i2 += 1
                         j2 += 1
                     i2 -= 1
@@ -285,7 +285,7 @@ class Piskvorky:
         for i in range(10):
             print(i, end='  ')
             for j in range(10):
-                print(self.area[i][j], end = ' ') # print(self.area[i], end = '\n')
+                print(self.pole[i][j], end = ' ') # print(self.area[i], end = '\n')
             print()
         print()
 
@@ -295,7 +295,7 @@ class Piskvorky:
         for i in range(10):
             print(i, end=' ')
             for j in range(10):
-                print(self.area[i][j], end = '') # print(self.area[i], end = '\n')
+                print(self.pole[i][j], end = '') # print(self.area[i], end = '\n')
             print()
         print()
 
@@ -313,7 +313,7 @@ class Piskvorky:
                     color = '\033[92m'
                 else:
                     color = '\033[0m'                
-                print(color, self.area[i][j], end = '')
+                print(color, self.pole[i][j], end = '')
                 color = '\033[0m'
             print()
         color = '\033[0m'
@@ -343,29 +343,4 @@ class Piskvorky:
         Black   = '\033[90m'
         Default = '\033[99m'
         https://www.geeksforgeeks.org/print-colors-python-terminal/
-'''
-
-'''
-p = Piskvorky()
-
-p.area[0] = 'OOOOXOOOOX'
-p.area[1] = 'XXXXOXXXXO'
-p.area[2] = 'OOOOXOOOOX'
-p.area[3] = 'XXXXOXXXXO'
-p.area[4] = 'OOOOXOOOOX'
-p.area[5] = 'XXXXOX    '
-p.area[6] = 'OOOOXOOOOX'
-p.area[7] = 'XXXXOXXXXO'
-p.area[8] = 'OOOOXOOOOX'
-p.area[9] = 'XXXXOXXXXO'
-p.print_play_area()
-
-while not p.vyhodnot('X'):
-    p.tah_pc_01('X')
-    p.print_play_area()
-    print(p.vyhodnot('X'))
-    p.tah_hrace('O')
-    p.print_play_area()
-    print(p.vyhodnot('O'))
-
 '''
