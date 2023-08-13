@@ -33,8 +33,10 @@ class Piskvorky:
         return False
         
     def vyhodnot(self, znak_xo):  # vrátí 'X' or 'O' or '-' za remízu  or None - to v případě chyby
+
 #       #self.znak = znak_xo        
         # vyhodnot řadky
+        self.souradnice_vyhry = []
         for i in range(10):
             if znak_xo * 5 in self.pole[i]:
                 print('výhra:', znak_xo,'řádek: ', i)
@@ -46,6 +48,7 @@ class Piskvorky:
                 return znak_xo
 
         # vyhodnot sloubce
+        self.souradnice_vyhry = []
         for j in range(10):
             z = False
             pocet_znaku = 0
@@ -64,6 +67,7 @@ class Piskvorky:
                     pocet_znaku = 0
 
         # vyhodnot z prava doleva - a dolu
+        self.souradnice_vyhry = []
         for i in range(10):  # řádek
             for j in range(10):  # slopec
                 pocet_znaku = 0
@@ -85,6 +89,7 @@ class Piskvorky:
                     j2 -= 1                    
 
         # vyhodnot z leva doprava - a dolu
+        self.souradnice_vyhry = []
         for i in range(10):  # řádek
             for j in range(10):  # slopec
                 pocet_znaku = 0
@@ -94,6 +99,7 @@ class Piskvorky:
                     if self.pole[i2][j2] == znak_xo:
                         pocet_znaku += 1
                         self.souradnice_vyhry.append((i2, j2))
+                        print(f'z leva doprava souradnice výhry: {self.souradnice_vyhry} pro znak_xo: {znak_xo}')
                         if pocet_znaku >= 5:
                             print('výhra: ', znak_xo ,'      je jich 5!  z leva doprava souradnice:', i2, j2)
                             self.aktualni_tah_i = None
@@ -104,10 +110,12 @@ class Piskvorky:
                         self.souradnice_vyhry = []
                     i2 += 1
                     j2 += 1
+
         self.je_volno()
         if not self.volno:
             return '-'
         return None
+    
 
     def zapis_znak(self, i, j, znak_xo) -> None:  # zapiš znak na souřadnice i, j
         self.i = i
@@ -134,7 +142,7 @@ class Piskvorky:
             print('Zadej souřadnice na volné pole 0 až 9 !')
 
     def tah_pc_nahodny(self, znak_xo) -> None:
-        self.znak = znak_xo
+#        self.znak = znak_xo
         nyni = None
         r1 = randrange(0, 10)
         r2 = randrange(0, 10)
@@ -153,8 +161,8 @@ class Piskvorky:
         self.pole[r1] = self.pole[r1][:r2] + znak_xo + self.pole[r1][r2 + 1:]        
 
     def tah_pc_01(self, znak_xo) -> None:
-        self.znak_xo = znak_xo
-        z = self.znak_xo        
+#        self.znak_xo = znak_xo
+        z = znak_xo
         if z == 'X':
             s = 'O'
         else:
@@ -163,25 +171,26 @@ class Piskvorky:
             for i in range(10):
                 if search_string in self.pole[i]:
                     print(f'hráč: "{znak_xo}" nalezeno: "{search_string}" řádek: {i}')
-                    self.zapis_znak(i, self.pole[i].index(search_string) + index_posunuti, self.znak_xo)
+                    self.zapis_znak(i, self.pole[i].index(search_string) + index_posunuti, znak_xo) #
                     return True
             return None
+
         def tah_ve_sloupci(search_string, index_posunuti, znak_xo) -> bool:
-            self.znak_xo = znak_xo
+#            self.znak_xo = znak_xo
             for j in range(10):
                 prac_str = ''
                 for i in range(10):
                     prac_str += self.pole[i][j]
                     if search_string in prac_str:
-                        print(f'hráč: "{znak_xo}" sloupec - nalezeno: "{search_string}" sloupec: {j} prac_str: "{prac_str}"')  #
-                        self.zapis_znak(prac_str.index(search_string) + index_posunuti, j, self.znak_xo)
+                        print(f'hráč: "{znak_xo}" sloupec - nalezeno: "{search_string}" sloupec: {j} prac_str: "{prac_str}"')
+                        self.zapis_znak(prac_str.index(search_string) + index_posunuti, j, znak_xo) #
                         #print(f'prac_str: "{prac_str}"')
                         #self.print_play_area()
                         return True
             return False
         
         def tah_sikmo_z_prava(search_string, index_posunuti, znak_xo) -> bool:
-            self.znak_xo = znak_xo
+#            self.znak_xo = znak_xo
             for i in range(10):  # řádek
                 for j in range(10):  # slopec
                     prac_str = ''
@@ -199,14 +208,14 @@ class Piskvorky:
                             print(f'hráč: "{znak_xo}" z prava: hledáno: "{search_string}" pracovní: "{prac_str}" diagonála: {j}')
                             # ii = i2 + prac_str.index(search_string)
                             print(f'zapisuji na: {i2 - prac_str.index(search_string) - index_posunuti},{j2 + prac_str.index(search_string) + index_posunuti}')
-                            self.zapis_znak(i2 - prac_str.index(search_string) - index_posunuti, j2 + prac_str.index(search_string) + index_posunuti, self.znak_xo)
+                            self.zapis_znak(i2 - prac_str.index(search_string) - index_posunuti, j2 + prac_str.index(search_string) + index_posunuti, znak_xo) #
                             self.aktualni_tah_i = i2 - prac_str.index(search_string) - index_posunuti
                             self.aktualni_tah_j = j2 + prac_str.index(search_string) + index_posunuti
                             return True
             return False
 
         def tah_sikmo_z_leva(search_string, index_posunuti, znak_xo) -> bool:
-            self.znak_xo = znak_xo
+#            self.znak_xo = znak_xo
             for i in range(10):  # řádek
                 for j in range(10):  # slopec
                     prac_str = ''
@@ -224,7 +233,7 @@ class Piskvorky:
                             print(f'hráč: "{znak_xo}" z leva: hledáno: "{search_string}" pracovní: "{prac_str}" diagonála: {j}')
                             # ii = i2 + prac_str.index(search_string)
                             print(f'zapisuji na: {i2 - prac_str.index(search_string) - index_posunuti},{j2 - prac_str.index(search_string) - index_posunuti}')
-                            self.zapis_znak(i2 - prac_str.index(search_string) - index_posunuti, j2 - prac_str.index(search_string) - index_posunuti, self.znak_xo)
+                            self.zapis_znak(i2 - prac_str.index(search_string) - index_posunuti, j2 - prac_str.index(search_string) - index_posunuti, znak_xo) #
                             return True
             return False
 
@@ -239,7 +248,7 @@ class Piskvorky:
         
         
         # z - aktualni hráč; s - soupeř
-        if tah_vsechny_smery(f'{z}{z}{z}{z} ', 4, self.znak_xo): return
+        if tah_vsechny_smery(f'{z}{z}{z}{z} ', 4, znak_xo): return  #
         '''
         elif tah_vsechny_smery(f'{z}{z}{z} {z}', 3, self.znak_xo): return
         elif tah_vsechny_smery(f'{z}{z} {z}{z}', 2, self.znak_xo): return
@@ -273,7 +282,7 @@ class Piskvorky:
         elif tah_vsechny_smery(f'  {z}  ', 1, self.znak_xo): return
         elif tah_vsechny_smery(f' {s} {s} ', 2, self.znak_xo): return
         '''
-        self.tah_pc_nahodny(self.znak_xo)
+        self.tah_pc_nahodny(znak_xo)  #
 
 
     def clear_screen(self):
@@ -300,24 +309,25 @@ class Piskvorky:
         print()
 
     def print_play_area_color(self):
-        color = '\033[0m'
-        end_color = '\033[0m'
+        puvodni_barva = '\033[0m'
+        barva = puvodni_barva
         print('    0 1 2 3 4 5 6 7 8 9')
         #print('.....................')
         for i in range(10):
-            print(color, i, end=' ')
+            print(barva, i, end=' ')
             for j in range(10):                
                 if self.aktualni_tah_i == i and self.aktualni_tah_j == j:
-                    color = '\033[93m'
+                    barva = '\033[93m'
                 elif (i, j) in set(self.souradnice_vyhry):
-                    color = '\033[92m'
+                    barva = '\033[92m'
                 else:
-                    color = '\033[0m'                
-                print(color, self.pole[i][j], end = '')
-                color = '\033[0m'
+                    barva = puvodni_barva
+                print(barva, self.pole[i][j], end = '')
+                barva = puvodni_barva
             print()
-        color = '\033[0m'
-        print(color)
+        print(f'{barva} souřednice výhry: {self.souradnice_vyhry}')
+        barva = '\033[0m'
+        print(barva)
 
 
 ''' barvy

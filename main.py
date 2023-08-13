@@ -55,3 +55,4 @@ print('počet kol celkem:', pocet_kol_celkem)
 print('vyhrál X:', vyher_x)
 print('vyhrál O:', vyher_o)
 print('remiza:', remiza)
+
